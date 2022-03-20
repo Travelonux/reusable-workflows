@@ -1,0 +1,53 @@
+name: scala-ci
+
+on:
+  workflow_call:
+    secrets:
+      GH_TOKEN:
+        required: true
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Label the PR action
+        uses: TimonVS/pr-labeler-action@v3
+        with:
+          configuration-path: .github/labeler.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout / Setup JDK / SBT-Cache
+        uses: rodobarcaaa/action-jdk-sbt-cache@v1.0.0
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          jdk-version: '8'
+
+      - run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M" sbt build
+
+      - run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M" sbt unitTests
+
+      - uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          check_name: unitTests
+          github_token: ${{ secrets.GH_TOKEN }}
+          files: ./**/*UnitTest.xml
+
+
+  merge:
+    if: startsWith(github.event.pull_request.head.ref, 'update') && github.actor == 'rodobarcaaa'
+    needs: [tests]
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: desbo/merge-pr-action@v0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          ALLOWED_UPDATE: minor
+          MERGE_METHOD: squash
