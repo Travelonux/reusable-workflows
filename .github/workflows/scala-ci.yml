@@ -20,12 +20,14 @@ jobs:
 
   check:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     timeout-minutes: 30
     steps:
       - name: Checkout / Setup JDK / SBT-Cache
         uses: rodobarcaaa/action-jdk-sbt-cache@v1.0.0
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ env.GITHUB_TOKEN }}
           jdk-version: '8'
 
       - run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M" sbt build
