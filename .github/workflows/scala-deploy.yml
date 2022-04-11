@@ -1,0 +1,58 @@
+name: scala-deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        description: environment
+        required: true  
+      version:
+        type: string
+        description: version
+        required: false      
+    secrets:
+      GH_TOKEN:
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_KEY:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Checkout / Setup JDK 8 / SBT-Cache
+        uses: rodobarcaaa/action-jdk-sbt-cache@main
+        with:
+          token: ${{ env.GITHUB_TOKEN }}
+          jdk-version: '8'
+          fetch-depth: '0'
+          ref: ${{ inputs.version }}
+
+      - name: start deployment
+        uses: bobheadxi/deployments@v1.1.0
+        id: deployment
+        with:
+          step: start
+          token: ${{ env.GITHUB_TOKEN }}
+          env: ${{ inputs.environment }} 
+
+      - name: Docker Deployment
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M" sbt -DreleaseType=${{inputs.environment}} ecr:createRepository ecr:login ecr:push
+
+      - name: finish deployment
+        uses: bobheadxi/deployments@v1.1.0
+        if: always()
+        with:
+          step: finish
+          token: ${{ env.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          env: ${{ steps.deployment.outputs.env }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
