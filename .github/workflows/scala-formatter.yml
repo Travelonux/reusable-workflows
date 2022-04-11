@@ -21,8 +21,8 @@ jobs:
 
       - name: Scala FMT
         run: |
-          git config user.name actions-user
-          git config user.email actions-user@github.com
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           sbt scalafmtAll
           git add -A
           git commit -m "chore: formating code with scalafmt [actions skip]"
