@@ -21,8 +21,8 @@ jobs:
 
       - name: Sbt Release
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name actions-user
+          git config user.email actions-user@github.com
           sbt "release with-defaults"
           
       - name: Set VERSION
