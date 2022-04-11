@@ -1,0 +1,40 @@
+name: scala-release
+
+on:
+  workflow_call:
+    secrets:
+      GH_TOKEN:
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Checkout / Setup JDK 8 / SBT-Cache
+        uses: rodobarcaaa/action-jdk-sbt-cache@v1.0.0
+        with:
+          token: ${{ env.GITHUB_TOKEN }}
+          jdk-version: '8'
+          fetch-depth: '0'
+
+      - name: Sbt Release
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          sbt "release with-defaults"
+          
+      - name: Set VERSION
+        run: echo "VERSION=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+
+      - name: Release Notes
+        uses: release-drafter/release-drafter@v5
+        with:
+          config-name: release-drafter.yml
+          publish: true
+          name: "${{ env.VERSION }}"
+          tag: "${{ env.VERSION }}"
+          version: "${{ env.VERSION }}"
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
