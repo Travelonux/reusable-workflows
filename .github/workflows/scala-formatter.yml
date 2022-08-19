@@ -23,7 +23,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          sbt scalafmtAll
+          SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M -XX:+UseG1GC" sbt scalafmtAll
           git add -A
           git commit -m "chore: formating code with scalafmt [actions skip]"
           git push
