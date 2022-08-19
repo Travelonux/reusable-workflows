@@ -38,9 +38,9 @@ jobs:
           token: ${{ env.GITHUB_TOKEN }}
           jdk-version: '8'
 
-      - run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M" sbt build
+      - run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M -XX:+UseG1GC" sbt build
 
-      - run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M" sbt unitTests
+      - run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M -XX:+UseG1GC" sbt unitTests
 
   merge:
     if: startsWith(github.event.pull_request.head.ref, 'update') && github.actor == 'rodobarcaaa'
