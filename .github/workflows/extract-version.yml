@@ -12,7 +12,7 @@ on:
         required: true
 
 jobs:
-  deploy:
+  version:
     runs-on: ubuntu-latest
     outputs:
      value: ${{ steps.version.outputs.value }}
