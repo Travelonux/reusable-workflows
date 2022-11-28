@@ -34,7 +34,7 @@ jobs:
           ref: ${{ inputs.version }}
 
       - name: start deployment
-        uses: bobheadxi/deployments@v1.3.0
+        uses: bobheadxi/deployments@v1
         id: deployment
         with:
           step: start
@@ -48,7 +48,7 @@ jobs:
         run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M -XX:+UseG1GC" sbt -DreleaseType=${{inputs.environment}} ecr:createRepository ecr:login ecr:push
 
       - name: finish deployment
-        uses: bobheadxi/deployments@v1.3.0
+        uses: bobheadxi/deployments@v1
         if: always()
         with:
           step: finish
