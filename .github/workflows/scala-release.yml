@@ -16,7 +16,7 @@ jobs:
         uses: rodobarcaaa/action-jdk-sbt-cache@v1.0.0
         with:
           token: ${{ env.GITHUB_TOKEN }}
-          jdk-version: '8'
+          jdk-version: '11'
           fetch-depth: '0'
 
       - name: Sbt Release
