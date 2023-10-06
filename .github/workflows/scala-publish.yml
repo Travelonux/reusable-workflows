@@ -19,5 +19,5 @@ jobs:
           jdk-version: '11'
           fetch-depth: '0'
 
-      - run: SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M -XX:+UseG1GC" sbt publish
+      - run: SBT_OPTS="-Xms2048M -Xmx4096M -Xss2M -XX:+UseG1GC" sbt publish
  
