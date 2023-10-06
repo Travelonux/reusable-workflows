@@ -23,7 +23,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          SBT_OPTS="-Xms1024M -Xmx2560M -Xss2M -XX:+UseG1GC" sbt "release with-defaults"
+          SBT_OPTS="-Xms2048M -Xmx4096M -Xss2M -XX:+UseG1GC" sbt "release with-defaults"
           
       - name: Set VERSION
         run: echo "VERSION=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
