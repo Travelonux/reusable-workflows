@@ -8,7 +8,7 @@ on:
 
 jobs:
   coventional:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 5
     steps:
       - uses: amannn/action-semantic-pull-request@v5
@@ -16,7 +16,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
   labeler:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 3
     steps:
       - name: Label the PR action
@@ -27,7 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     timeout-minutes: 30
@@ -45,7 +45,7 @@ jobs:
   merge:
     if: startsWith(github.event.pull_request.head.ref, 'update') && github.actor == 'travelonux-dev'
     needs: [check]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 3
     steps:
       - uses: desbo/merge-pr-action@v0
