@@ -26,7 +26,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout / Setup JDK 8 / SBT-Cache
-        uses: rodobarcaaa/action-jdk-sbt-cache@main
+        uses: ./.github/actions/jdk-sbt-cache
         with:
           token: ${{ env.GITHUB_TOKEN }}
           jdk-version: '11'
