@@ -13,7 +13,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}    
     steps:
       - name: Checkout / Setup JDK 8 / SBT-Cache
-        uses: Travelonux/action-jdk-sbt-cache.yml@main
+        uses: Travelonux/action-jdk-sbt-cache@main
         with:
           token: ${{ env.GITHUB_TOKEN }}
           jdk-version: '11'
