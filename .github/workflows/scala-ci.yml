@@ -33,7 +33,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout / Setup JDK / SBT-Cache
-        uses: rodobarcaaa/action-jdk-sbt-cache@v1.0.0
+        uses: Travelonux/action-jdk-sbt-cache@main
         with:
           token: ${{ env.GITHUB_TOKEN }}
           jdk-version: '8'
